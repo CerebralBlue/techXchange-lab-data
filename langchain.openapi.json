@@ -1,0 +1,149 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "LangChain Query API",
+    "description": "API for querying information using LangChain.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://{server}.us-south.codeengine.appdomain.cloud",
+      "variables": {
+        "server": {
+          "default": "lab-inference.1n2yotv1yhq7"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/query": {
+      "post": {
+        "summary": "Run a query and get a response",
+        "operationId": "runQuery",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Query request object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved query result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueryResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. Missing or invalid API key."
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "apikey"
+      }
+    },
+    "schemas": {
+      "QueryRequest": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "The query to be processed"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      },
+      "QueryResponse": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "The original query"
+          },
+          "result": {
+            "type": "string",
+            "description": "The result of the query"
+          },
+          "source_documents": {
+            "type": "array",
+            "description": "The documents used to generate the query result",
+            "items": {
+              "$ref": "#/components/schemas/Document"
+            }
+          }
+        }
+      },
+      "Document": {
+        "type": "object",
+        "properties": {
+          "page_content": {
+            "type": "string",
+            "description": "The content of the document"
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Metadata about the document",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "id": {
+                "type": "integer"
+              }
+            }
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the document (e.g., \"Document\")"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "string",
+            "description": "Error message"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ]
+}
