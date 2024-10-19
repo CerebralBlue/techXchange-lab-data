@@ -10,7 +10,7 @@
       "url": "https://{server}.us-south.codeengine.appdomain.cloud",
       "variables": {
         "server": {
-          "default": "lab-inference.1n2yotv1yhq7"
+          "default": "application-f7.1n781l8j7xkv"
         }
       }
     }
